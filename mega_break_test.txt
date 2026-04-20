@@ -1,0 +1,41 @@
+ADD id=1 AAPL BUY pr=100 qty=5 time=1 ttl=3
+QUERY time=1
+CANCEL id=1
+QUERY time=2
+ADD id=2 AAPL BUY pr=100 qty=5 time=3 ttl=2
+ADD id=2 MSFT SELL pr=10 qty=1 time=4 ttl=5
+QUERY time=4
+ADD id=3 AAPL BUY pr=100 qty=-5 time=5 ttl=5
+ADD id=0 AAPL BUY pr=100 qty=1 time=6 ttl=5
+ADD id=-1 AAPL BUY pr=100 qty=1 time=7 ttl=5
+ADD id=4 NFLX BUY pr=100 qty=1 time=8 ttl=5
+ADD id=5 AAPL HOLD pr=100 qty=1 time=9 ttl=5
+ADD id=6 AAPL BUY pr=0 qty=1 time=10 ttl=5
+ADD id=7 AAPL BUY pr=100 qty=0 time=11 ttl=5
+ADD id=8 AAPL BUY pr=100 qty=1 time=-1 ttl=5
+ADD id=9 AAPL BUY pr=100 qty=1 time=12 ttl=0
+QUERY time=13 extra
+MODIFY id=2 pr=90 qty=1 time=14
+ADD id=10 AAPL SELL pr=90 qty=1 time=15 ttl=5
+QUERY time=15
+MODIFY id=999 pr=10 qty=1 time=16
+CANCEL id=999 time=17
+ADD id=11 TSLA SELL pr=200 qty=1 time=18 ttl=5
+ADD id=12 TSLA SELL pr=200 qty=1 time=18 ttl=5
+ADD id=13 TSLA BUY pr=200 qty=1 time=19 ttl=5
+QUERY time=19
+ADD id=14 GOOGL BUY pr=300 qty=1 time=2147483640 ttl=10
+QUERY time=2147483647
+QUERY time=20
+ADD id=15 AMZN BUY pr=100 qty=1 time=21 ttl=1
+QUERY time=22
+ADD id=15 AMZN SELL pr=99 qty=1 time=23 ttl=5
+QUERY time=23
+ADD id=16 AAPL BUY pr=100 qty=1 time=24 ttl=5 extra
+MODIFY id=15 pr=98 qty=1 time=25 extra
+CANCEL id=15 time=26 extra
+BROKEN time=27
+
+ADD id=17 AAPL BUY pr=100 qty=1 time=28 ttl=5
+ADD id=18 AAPL SELL pr=99 qty=1 time=29 ttl=5 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+QUERY time=30
