@@ -319,6 +319,7 @@ int parse_MODIFY(const char* line, Modify *modify, OrderBook *book, int *current
 
 // Match a BUY order with the lowest-price eligible SELL order.
 void match_buy(OrderBook *book, Order *buy){
+    int no_match = 1;
     while (buy->quantity > 0){
         Order *curr = book->sell_head;
         Order *min = NULL;
@@ -338,6 +339,9 @@ void match_buy(OrderBook *book, Order *buy){
         if (min == NULL){
             break;
         }
+
+        no_match = 0;
+
         int match = (buy->quantity < min->quantity) ? buy->quantity : min->quantity;
         printf("Matched: Order ID:%d Order ID:%d Quantity: %d\n", buy->id, min->id, match);
         buy->quantity -= match;
@@ -355,10 +359,14 @@ void match_buy(OrderBook *book, Order *buy){
             remove_from_list(&book->sell_head, min->id);
         }
     }
+    if (no_match){
+    printf("No matches found.\n");
+    }
 }
 
 // Match a SELL order with the highest-price eligible BUY order.
 void match_sell(OrderBook *book, Order *sell){
+    int no_match = 1;
     while (sell->quantity > 0){
         Order *curr = book->buy_head;
         Order *max = NULL;
@@ -378,6 +386,8 @@ void match_sell(OrderBook *book, Order *sell){
         if (max == NULL){
             break;
         }
+
+        no_match = 0;
         int match = (sell->quantity < max->quantity) ? sell->quantity : max->quantity;
         printf("Matched: Order ID:%d Order ID:%d Quantity: %d\n", max->id, sell->id, match);
         sell->quantity -= match;
@@ -395,6 +405,9 @@ void match_sell(OrderBook *book, Order *sell){
         if (max->quantity == 0){
             remove_from_list(&book->buy_head, max->id);
         }
+    }
+    if (no_match){
+    printf("No matches found.\n");
     }
 }
 
@@ -434,7 +447,7 @@ void expired_orders(OrderBook *book, int current_time){
         if ((long long)curr->time + curr->ttl <= current_time){
             int temp_ID = curr->id;
             remove_from_list(&book->buy_head, curr->id);
-            printf("Buy order %d expired.\n", temp_ID);
+            printf("Buy Order ID: %d expired.\n", temp_ID);
         }
         curr = temp;
     }
@@ -446,7 +459,7 @@ void expired_orders(OrderBook *book, int current_time){
         if ((long long)curr->time + curr->ttl <= current_time){
             int temp_ID = curr->id;
             remove_from_list(&book->sell_head, curr->id);
-            printf("Sell order %d expired.\n", temp_ID);
+            printf("Sell Order ID:%d expired.\n", temp_ID);
         }
         curr = temp;
     }
@@ -471,34 +484,36 @@ void command_query(OrderBook* book){
 
         printf("%s:\n", sym);
 
-        printf("BUY orders:");
+        printf("Pending BUY orders:");
         curr = book->buy_head;
         while (curr != NULL) {
             if (strcmp(curr->symbol, sym) == 0) {
-                printf(" id=%d pr=%.2f qty=%d time=%d ttl=%d",
-                       curr->id, curr->price, curr->quantity, curr->time, curr->ttl);
+                printf(" id=%d pr=%.2f qty=%d time=%d ttl=%d", curr->id, curr->price, curr->quantity, curr->time, curr->ttl);
                 has_buy = 1;
             }
             curr = curr->next;
         }
+
         if (!has_buy) {
             printf(" none");
         }
+
         printf("\n");
 
-        printf("SELL orders:");
+        printf("Pending SELL orders:");
         curr = book->sell_head;
         while (curr != NULL) {
             if (strcmp(curr->symbol, sym) == 0) {
-                printf(" id=%d pr=%.2f qty=%d time=%d ttl=%d",
-                       curr->id, curr->price, curr->quantity, curr->time, curr->ttl);
+                printf(" id=%d pr=%.2f qty=%d time=%d ttl=%d", curr->id, curr->price, curr->quantity, curr->time, curr->ttl);
                 has_sell = 1;
             }
             curr = curr->next;
         }
+
         if (!has_sell) {
             printf(" none");
         }
+
         printf("\n\n");
     }
 }
